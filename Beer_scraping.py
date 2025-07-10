@@ -35,17 +35,19 @@ for pub in pubs:
     resp_pub.raise_for_status()
     soup = BeautifulSoup(resp_pub.text, "html.parser")
 
+    pub['beers'] = []
+
     for beer_div in soup.select("div.col-xl-4.col-lg-4.col-md-4.col-sm-6"):
         panel_body = beer_div.select_one(".panel-body")
         beer_data = panel_body.get_text(separator="#", strip=True).split('#')
+        for data in beer_data:
+            if data == 'WHALE' or data == 'New':
+                beer_data.remove(data)
         beer_data.remove('on tap for')
-        # beer_name = panel_body.select_one("h4.cml_shadow span").get_text(separator='"', strip=True)
-        # panel_footer = beer_data.select_one(".panel-footer")
-        # beer = panel_body.get_text(separator=" ", strip=True)
+        panel_footer = beer_div.select_one(".panel-footer")
+        beer_price = panel_footer.get_text(separator=" ", strip=True)
         beer = {'tap': beer_data[0], 'brewery': beer_data[1], 'name': beer_data[2], 'details': beer_data[3],
-                'time': beer_data[4], 'style': beer_data[5]}
-        print(beer)
+                'time': beer_data[4], 'style': beer_data[5], 'beer_price': beer_price}
+        pub['beers'].append(beer)
 
-
-# print(pubs)
 
