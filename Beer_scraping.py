@@ -5,10 +5,10 @@ cities = ['wroclaw', 'katowice', 'gdansk', 'warszawa', 'gdynia']
 
 def type_city():
     city = input("Type a city: ").lower()
-    if city not in cities:
-        print("Wrong city.")
-    else:
+    if city in cities:
         return city
+    else:
+        return "Wrong city."
 
 def pubs_from_city(city):
     url = f"https://ontap.pl/{city}/multitapy"
@@ -27,8 +27,8 @@ def pubs_from_city(city):
         pubs.append({"name": pub_name, "url": pub_url})
     return pubs
 
-city = type_city()
-pubs = pubs_from_city(city)
+selected_city = type_city()
+pubs = pubs_from_city(selected_city)
 
 for pub in pubs:
     resp_pub = requests.get(pub["url"])
